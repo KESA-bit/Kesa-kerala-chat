@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KESA - Premium Social Network</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+    <div class="login-card">
+        <h1 class="logo">KESA</h1>
+        <p class="subtitle">Premium Social Network</p>
+
+        <form id="login-form">
+            <div class="input-group">
+                <span class="icon">✉️</span>
+                <input type="email" id="email_input" placeholder="Email" required 
+                       pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                       title="ദയവായി ഒരു സാധുവായ ഇമെയിൽ വിലാസം നൽകുക.">
+            </div>
+            
+            <div class="input-group">
+                <span class="icon">🔒</span>
+                <input type="password" id="password_input" placeholder="Password" required 
+                       minlength="6" 
+                       title="പാസ്‌വേഡിന് കുറഞ്ഞത് 6 അക്ഷരങ്ങൾ നീളം ഉണ്ടായിരിക്കണം.">
+            </div>
+
+            <button type="submit" class="primary-btn">Login</button>
+        </form>
+
+        <div class="secondary-action">
+            <a href="signup.html">Don't have an account? Sign Up</a>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
