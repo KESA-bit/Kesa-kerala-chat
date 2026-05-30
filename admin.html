@@ -1,0 +1,60 @@
+<script>
+    // 🛠️ ഫയർബേസ് കോൺഫിഗറേഷൻ (മെയിൻ ആപ്പിലെ അതേ ഡീറ്റെയിൽസ്)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAldkKl1rlGjs-amA8rUADDW4vXczckNfs",
+        authDomain: "kesa-c9fd6.firebaseapp.com",
+        databaseURL: "https://kesa-c9fd6-default-rtdb.firebaseio.com",
+        projectId: "kesa-c9fd6",
+        storageBucket: "kesa-c9fd6.firebasestorage.app",
+        messagingSenderId: "1006282632848",
+        appId: "1:1006282632848:web:d8606db435e9292fb8f215"
+    };
+
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const rdb = firebase.database();
+
+    // 🔑 സുരക്ഷാ ലോക്ക്: നിന്റെ പേര് ഇവിടെ കൊടുക്കുക (ഉദാഹരണത്തിന് 'Appu')
+    const SUPER_ADMIN_NAME = "Appu"; 
+
+    rdb.ref('users_profile').on('value', (snapshot) => {
+        const listWrapper = document.getElementById('admin-users-list');
+        listWrapper.innerHTML = "";
+        
+        // അഡ്മിൻ പാനൽ തുറന്നിരിക്കുന്ന കറന്റ് യൂസറെ നോക്കുന്നു
+        const currentAdminUser = localStorage.getItem('kesa_username') || localStorage.getItem('username');
+
+        snapshot.forEach((childSnapshot) => {
+            const user = childSnapshot.val();
+            const hasTick = user.isVerified === true;
+
+            // നിന്റെ പേരിലാണോ ലോഗിൻ ചെയ്തത് എന്ന് നോക്കുന്നു, അല്ലങ്കിൽ ബട്ടൺ ഡിസേബിൾഡ് ആകും
+            const isAuthorized = (currentAdminUser === SUPER_ADMIN_NAME);
+
+            listWrapper.innerHTML += `
+                <div class="user-row" style="display: flex; justify-content: space-between; margin-bottom:10px; background:#2c2c2e; padding:10px; border-radius:8px;">
+                    <div class="username-section">
+                        <span>${user.username}</span>
+                        ${hasTick ? '<i class="fa-solid fa-circle-check" style="color:#0095f6; margin-left:5px;"></i>' : ''}
+                    </div>
+                    <div>
+                        ${isAuthorized ? 
+                            (hasTick ? 
+                                `<button onclick="toggleBlueTick('${user.username}', false)" style="background:#ff3b30; color:#fff; border:none; padding:5px 10px; border-radius:4px;">Remove Tick</button>` : 
+                                `<button onclick="toggleBlueTick('${user.username}', true)" style="background:#0095f6; color:#fff; border:none; padding:5px 10px; border-radius:4px;">Give Blue Tick</button>`
+                            ) : 
+                            `<span style="color:#666; font-size:12px;">No Permission 🔒</span>`
+                        }
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    function toggleBlueTick(username, status) {
+        rdb.ref('users_profile/' + username).update({
+            isVerified: status
+        }).then(() => {
+            alert(`${username} എന്ന യൂസറുടെ വെരിഫിക്കേഷൻ സ്റ്റാറ്റസ് മാറ്റിയിട്ടുണ്ട്!`);
+        });
+    }
+</script>

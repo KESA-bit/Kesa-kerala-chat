@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KESA - Premium Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            background: #000000; 
+            color: #ffffff; 
+            margin: 0; 
+            font-family: '-apple-system', BlinkMacSystemFont, sans-serif;
+            padding-bottom: 70px; /* താഴത്തെ ബാറിന് വേണ്ടിയുള്ള സ്പേസ് */
+        }
+        
+        /* 📱 ഹെഡ്ഡർ സ്റ്റൈൽ */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #000000;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1c1c1e;
+        }
+        .app-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ff6f00;
+            letter-spacing: 1px;
+        }
+        .header-icons i {
+            font-size: 20px;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        /* 📸 ഇൻസ്റ്റാഗ്രാം സ്റ്റോറി സെക്ഷൻ (പഴയതുപോലെ തന്നെ നിലനിർത്തി) */
+        .stories-container {
+            display: flex;
+            padding: 10px 15px;
+            overflow-x: auto;
+            border-bottom: 1px solid #1c1c1e;
+            gap: 15px;
+        }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story-box { text-align: center; font-size: 11px; color: #8e8e93; min-width: 65px; }
+        .story-img-wrapper {
+            position: relative;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(45deg, #ff6f00, #ffca28);
+            margin-bottom: 5px;
+        }
+        .story-box.your-story .story-img-wrapper { background: #3a3a3c; }
+        .story-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+        .add-story-plus {
+            position: absolute; bottom: 0; right: 0;
+            background: #ff6f00; color: #000; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 12px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; border: 2px solid #000;
+        }
+
+        /* 🏠 മെയിൻ ഹോം ഫീഡ് (സാധാരണ ഫ്രീ സ്ക്രോളിങ് - ലോക്കിങ് ഇല്ല) */
+        .home-feed {
+            display: block;
+            padding: 10px 0;
+        }
+        .instagram-post {
+            background: #000000;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #1c1c1e;
+            padding-bottom: 15px;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+        }
+        .post-user-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; margin-right: 10px; }
+        .post-username { font-weight: 700; font-size: 14px; }
+        .post-image-box { width: 100%; max-height: 450px; overflow: hidden; background: #1c1c1e; }
+        .post-image-box img { width: 100%; height: 100%; object-fit: cover; }
+        .post-actions { padding: 12px 15px; display: flex; gap: 20px; font-size: 20px; }
+        .post-actions i { cursor: pointer; transition: color 0.2s; }
+        .post-actions i:hover { color: #ff6f00; }
+        .post-likes { padding: 0 15px; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+        .post-caption { padding: 0 15px; font-size: 14px; color: #efeff4; }
+        .post-caption span { font-weight: 700; margin-right: 8px; }
+
+        /* 🎬 🎬 റീൽസ് സെക്ഷൻ (പക്കാ ഇൻസ്റ്റാഗ്രാം വീഡിയോ ലോക്കിങ് സിസ്റ്റം) */
+        .reels-feed {
+            display: none; /* തുടക്കത്തിൽ മറച്ചു വെക്കുന്നു, ബട്ടൺ ഞെക്കുമ്പോൾ കാണിക്കും */
+            height: calc(100vh - 65px); /* താഴത്തെ ബാർ കഴിഞ്ഞ് ബാക്കി സ്പേസ് */
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory; /* 👈 അടുത്ത വീഡിയോയിലേക്ക് കറക്റ്റ് ആയി ലോക്ക് ചെയ്യുന്ന മാജിക് */
+        }
+        .reels-feed::-webkit-scrollbar { display: none; }
+        
+        .single-reel {
+            height: calc(100vh - 65px);
+            width: 100%;
+            scroll-snap-align: start; /* 👈 ഇവിടെയാണ് വീഡിയോ ലോക്ക് ആകുന്നത് */
+            position: relative;
+            background: #1c1c1e;
+        }
+        .reel-video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #2c2c2e, #000000);
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6f00;
+        }
+        /* റീൽസിന് മുകളിലുള്ള വിവരങ്ങൾ */
+        .reel-overlay-info {
+            position: absolute;
+            bottom: 30px;
+            left: 15px;
+            z-index: 10;
+        }
+        .reel-user { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .reel-user img { width: 32px; height: 32px; border-radius: 50%; }
+        .reel-user span { font-weight: 700; font-size: 14px; }
+        .reel-desc { font-size: 13px; color: #e5e5ea; }
+        
+        /* റീൽസ് സൈഡ് ആക്ഷൻ ബട്ടണുകൾ */
+        .reel-side-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: center;
+            z-index: 10;
+        }
+        .reel-action-btn { text-align: center; cursor: pointer; }
+        .reel-action-btn i { font-size: 24px; color: #ffffff; margin-bottom: 5px; }
+        .reel-action-btn span { font-size: 12px; color: #8e8e93; display: block; }
+
+        /* 📥 താഴത്തെ നാവിഗേഷൻ ബാർ (റീൽസ് ബട്ടൺ ഉൾപ്പെടുത്തിയത്) */
+        .bottom-nav-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 65px;
+            background: #1c1c1e;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #2c2c2e;
+            z-index: 200;
+        }
+        .nav-item {
+            color: #8e8e93;
+            font-size: 22px;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 10px;
+        }
+        .nav-item.active {
+            color: #ff6f00; /* ആക്റ്റീവ് ആകുമ്പോൾ പ്രീമിയം ഓറഞ്ച് */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="app-title">KESA</div>
+        <div class="header-icons">
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-paper-plane"></i>
+        </div>
+    </div>
+
+    <div class="stories-container">
+        <div class="story-box your-story">
+            <div class="story-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="You">
+                <div class="add-story-plus">+</div>
+            </div>
+            <span>Your story</span>
+        </div>
+        <div class="story-box">
+            <div class="story-img-wrapper"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" alt="User"></div>
+            <span>aamirhh_mhd</span>
+        </div>
+        <div class="story-box">
+            <div class="story-img-wrapper"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="User"></div>
+            <span>_soor_yaaaaa</span>
+        </div>
+        <div class="story-box">
+            <div class="story-img-wrapper"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="User"></div>
+            <span>_siy_4m</span>
+        </div>
+    </div>
+
+    <div class="home-feed" id="main-home-feed">
+        
+        <div class="instagram-post">
+            <div class="post-header">
+                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" class="post-user-img">
+                <div class="post-username">aamirhh_mhd</div>
+            </div>
+            <div class="post-image-box">
+                <img src="75503.jpg" alt="Innova Crysta Modified">
+            </div>
+            <div class="post-actions">
+                <i class="fa-regular fa-heart" onclick="likePost(this)"></i>
+                <i class="fa-regular fa-comment"></i>
+                <i class="fa-regular fa-paper-plane"></i>
+            </div>
+            <div class="post-likes">2,772 likes</div>
+            <div class="post-caption"><span>aamirhh_mhd</span> കൊടുങ്കാറ്റായി KESA സുപ്പർ റൈഡ്! 🦅🔥</div>
+        </div>
+
+        <div class="instagram-post">
+            <div class="post-header">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" class="post-user-img">
+                <div class="post-username">_soor_yaaaaa</div>
+            </div>
+            <div class="post-image-box">
+                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600" alt="Supercar">
+            </div>
+            <div class="post-actions">
+                <i class="fa-regular fa-heart" onclick="likePost(this)"></i>
+                <i class="fa-regular fa-comment"></i>
+                <i class="fa-regular fa-paper-plane"></i>
+            </div>
+            <div class="post-likes">1,405 likes</div>
+            <div class="post-caption"><span>_soor_yaaaaa</span> ലേറ്റ് നൈറ്റ് വൈബ്സ് മച്ചാന്മാരെ... 🌃</div>
+        </div>
+
+    </div>
+
+    <div class="reels-feed" id="main-reels-feed">
+        
+        <div class="single-reel">
+            <div class="reel-video-placeholder">
+                <i class="fa-solid fa-play" style="font-size: 40px; margin-bottom: 10px; display:block;"></i>
+                Reels Video 1 (കാണാൻ തോണ്ടുക)
+            </div>
+            <div class="reel-overlay-info">
+                <div class="reel-user">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150">
+                    <span>_siy_4m</span>
+                </div>
+                <div class="reel-desc">ഈ ലുക്ക് എങ്ങനെയുണ്ട് മച്ചാന്മാരെ? 💥 #trending #kesa</div>
+            </div>
+            <div class="reel-side-actions">
+                <div class="reel-action-btn"><i class="fa-solid fa-heart" onclick="toggleReelLike(this)"></i><span>45K</span></div>
+                <div class="reel-action-btn"><i class="fa-solid fa-comment"></i><span>1.2K</span></div>
+                <div class="reel-action-btn"><i class="fa-solid fa-paper-plane"></i><span>Share</span></div>
+            </div>
+        </div>
+
+        <div class="single-reel">
+            <div class="reel-video-placeholder">
+                <i class="fa-solid fa-play" style="font-size: 40px; margin-bottom: 10px; display:block;"></i>
+                Reels Video 2 (അടുത്ത മാസ്സ്)
+            </div>
+            <div class="reel-overlay-info">
+                <div class="reel-user">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150">
+                    <span>aamirhh_mhd</span>
+                </div>
+                <div class="reel-desc">ടാറ്റാ പഞ്ച് പുതിയ മോഡിഫിക്കേഷൻ വർക്ക് കഴിഞ്ഞപ്പോൾ! 🦅🔥</div>
+            </div>
+            <div class="reel-side-actions">
+                <div class="reel-action-btn"><i class="fa-solid fa-heart" onclick="toggleReelLike(this)"></i><span>62K</span></div>
+                <div class="reel-action-btn"><i class="fa-solid fa-comment"></i><span>3.5K</span></div>
+                <div class="reel-action-btn"><i class="fa-solid fa-paper-plane"></i><span>Share</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav-bar">
+        <div class="nav-item active" id="home-tab-btn" onclick="switchMainTab('home')">
+            <i class="fa-solid fa-house"></i>
+        </div>
+        <div class="nav-item" id="reels-tab-btn" onclick="switchMainTab('reels')">
+            <i class="fa-solid fa-clapperboard"></i>
+        </div>
+        <div class="nav-item" id="profile-tab-btn" onclick="switchMainTab('profile')">
+            <i class="fa-solid fa-user"></i>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

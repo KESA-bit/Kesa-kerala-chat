@@ -1,0 +1,286 @@
+/* KESA PREMIUM GLOBAL STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* TOP HEADER */
+.kesa-header {
+    background-color: #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 18px;
+    border-bottom: 1px solid #1c1c1e;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.kesa-logo {
+    font-size: 24px;
+    font-weight: 900;
+    color: #ff6f00; /* KESA SIGNATURE ORANGE */
+    letter-spacing: 1px;
+    font-style: italic;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.add-post-btn {
+    font-size: 22px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.location-badge {
+    background-color: #1c1c1e;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #2c2c2e;
+}
+
+.location-badge i {
+    color: #ff6f00;
+}
+
+/* MAIN SCROLL LAYER */
+.main-scroll-content {
+    margin-top: 65px;
+    margin-bottom: 65px;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+/* STORIES SYSTEM */
+.stories-container {
+    display: flex;
+    gap: 16px;
+    padding: 15px;
+    overflow-x: auto;
+    border-bottom: 1px solid #1c1c1e;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.stories-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.story-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 75px;
+}
+
+.story-ring {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    padding: 3px;
+    position: relative;
+}
+
+/* Instagram style gradient but customized for KESA Orange-Red gradient */
+.active-ring {
+    background: linear-gradient(45deg, #ff6f00, #ff3d00, #ff8f00);
+}
+
+.personal {
+    background: #2c2c2e;
+}
+
+.story-ring img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #000000;
+}
+
+.plus-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #0095f6;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #000000;
+    font-size: 10px;
+}
+
+.story-username {
+    font-size: 11px;
+    color: #8e8e93;
+    max-width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* SECTION TITLES */
+.section-title-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 15px 10px 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8e8e93;
+    letter-spacing: 0.5px;
+}
+
+.add-note-btn {
+    color: #0095f6;
+    cursor: pointer;
+}
+
+/* GLOBAL CHAT BANNER */
+.global-chat-banner {
+    background: linear-gradient(135deg, #ff6f00, #ff3d00);
+    margin: 5px 15px 15px 15px;
+    padding: 18px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(255, 111, 0, 0.2);
+}
+
+.banner-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.chat-icon-bg {
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.banner-text h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.banner-text p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 2px;
+}
+
+.banner-arrow {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* USER LIST CARDS */
+.active-users-list {
+    padding: 0 15px;
+}
+
+.user-item-card {
+    background-color: #1c1c1e;
+    border: 1px solid #2c2c2e;
+    padding: 12px 15px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info-side {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-meta h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.status-online {
+    font-size: 11px;
+    color: #34c759;
+    margin-top: 3px;
+    font-weight: 500;
+}
+
+.message-action-btn {
+    background-color: #0095f6;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* BOTTOM NAVIGATION BAR */
+.bottom-navigation-bar {
+    background-color: #000000;
+    border-top: 1px solid #1c1c1e;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-item {
+    font-size: 22px;
+    color: #8e8e93;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.active-nav {
+    color: #ff6f00; /* Active tab lights up in KESA Orange */
+}

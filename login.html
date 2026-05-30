@@ -3,40 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KESA - Premium Social Network</title>
-    <link rel="stylesheet" href="style.css">
+    <title>KESA - Welcome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            background: #000000; 
+            color: #ffffff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: '-apple-system', BlinkMacSystemFont, sans-serif;
+        }
+        .auth-container { 
+            width: 90%; 
+            max-width: 340px; 
+            padding: 30px 20px; 
+            background: #1c1c1e; 
+            border-radius: 18px; 
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        /* 👑 നമ്മുടെ ആപ്പിന്റെ പേരിനുള്ള മാസ്സ് സ്റ്റൈൽ */
+        .app-logo-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ff6f00; /* പ്രീമിയം ഓറഞ്ച് നിറം */
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        /* ടാബുകളുടെ സ്റ്റൈൽ (Login / Signup മാറാൻ) */
+        .auth-tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #2c2c2e;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 16px;
+            color: #8e8e93;
+            transition: color 0.2s;
+        }
+        .tab-btn.active {
+            color: #ff6f00;
+            border-bottom: 2px solid #ff6f00;
+            margin-bottom: -2px;
+        }
+
+        /* ഇൻപുട്ട് ബോക്സുകൾ */
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8e8e93;
+            font-size: 16px;
+        }
+        .input-group input { 
+            width: 100%; 
+            padding: 12px 12px 12px 45px; 
+            background: #2c2c2e; 
+            border: 1px solid #3a3a3c; 
+            color: #ffffff; 
+            border-radius: 10px; 
+            outline: none; 
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .input-group input::placeholder {
+            color: #8e8e93;
+        }
+
+        /* പ്രീമിയം ഓറഞ്ച് ബട്ടൺ */
+        .premium-btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #ff6f00; 
+            color: #000000; 
+            font-weight: 800; 
+            font-size: 16px;
+            border-radius: 10px; 
+            cursor: pointer; 
+            border: none;
+            margin-top: 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .premium-btn:active {
+            background: #e65c00;
+        }
+
+        /* ഫോമുകൾ മാറ്റാൻ */
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active-form {
+            display: block;
+        }
+    </style>
 </head>
-<body class="login-body">
+<body>
 
-    <div class="login-card">
-        <h1 class="logo">KESA</h1>
-        <p class="subtitle">Premium Social Network</p>
+    <div class="auth-container">
+        <div class="app-logo-title">KESA</div>
 
-        <form id="login-form">
+        <div class="auth-tabs">
+            <div class="tab-btn active" onclick="switchAuthTab('login-form-layer', this)">Login</div>
+            <div class="tab-btn" onclick="switchAuthTab('signup-form-layer', this)">Sign Up</div>
+        </div>
+        
+        <div class="auth-form active-form" id="login-form-layer">
             <div class="input-group">
-                <span class="icon">✉️</span>
-                <input type="email" id="email_input" placeholder="Email" required 
-                       pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
-                       title="ദയവായി ഒരു സാധുവായ ഇമെയിൽ വിലാസം നൽകുക.">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="login-email" placeholder="Email">
             </div>
-            
             <div class="input-group">
-                <span class="icon">🔒</span>
-                <input type="password" id="password_input" placeholder="Password" required 
-                       minlength="6" 
-                       title="പാസ്‌വേഡിന് കുറഞ്ഞത് 6 അക്ഷരങ്ങൾ നീളം ഉണ്ടായിരിക്കണം.">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="login-password" placeholder="Password">
             </div>
+            <div class="premium-btn" id="login-btn">Login</div>
+        </div>
 
-            <button type="submit" class="primary-btn">Login</button>
-        </form>
-
-        <div class="secondary-action">
-            <a href="signup.html">Don't have an account? Sign Up</a>
+        <div class="auth-form" id="signup-form-layer">
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="signup-email" placeholder="New Email">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="signup-password" placeholder="New Password">
+            </div>
+            <div class="premium-btn" id="signup-btn">Create Account</div>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    
     <script src="script.js"></script>
+
+    <script>
+        function switchAuthTab(formId, btnElement) {
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active-form'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(formId).classList.add('active-form');
+            btnElement.classList.add('active');
+        }
+    </script>
 </body>
 </html>
