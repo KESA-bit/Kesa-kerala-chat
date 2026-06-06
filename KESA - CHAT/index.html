@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KESA - Kerala Public Rooms</title>
     
-    <!-- അഡ്‌സ്റ്റെറ ബാക്ക്ഗ്രൗണ്ട് (Popunder) പരസ്യ കോഡ് -->
     <script src="https://pl29656891.effectivecpmnetwork.com/48/21/5c/48215c9a4f06f775a8557fdc3e920ba6.js"></script>
 
     <style>
@@ -83,7 +82,6 @@
             transition: all 0.2s ease;
         }
         
-        /* രണ്ടാമത്തെ സ്ക്രീൻഷോട്ടിലെ പോലെ കൃത്യം ഓറഞ്ച് ലൊക്കേഷൻ ഐക്കൺ സ്റ്റൈൽ */
         .room-btn .btn-icon {
             font-size: 24px;
             color: #ff8800;
@@ -296,7 +294,6 @@
 </head>
 <body>
 
-    <!-- ആദ്യമായി കയറുമ്പോൾ പേര് ചോദിക്കുന്ന ബോക്സ് -->
     <div id="login-modal" class="name-modal">
         <div class="name-box">
             <h3 style="color: #ff8800; margin-top: 0;">Enter Your Name</h3>
@@ -307,7 +304,6 @@
         </div>
     </div>
 
-    <!-- മുകളിലെ പരസ്യം (320x50 Banner) -->
     <div class="ad-container" id="top-ad">
         <script>
           atOptions = {
@@ -323,7 +319,6 @@
 
     <h1 class="header" id="main-header">KESA - Kerala Rooms</h1>
 
-    <!-- VIEW 1: ജില്ലകളുടെ ലിസ്റ്റ് (ഇപ്പോൾ രണ്ടാമത്തെ സ്ക്രീൻഷോട്ടിൽ ഉള്ളതുപോലെ ഓറഞ്ച് ലൊക്കേഷൻ സിംബൽ ആക്കി മാറ്റിയിട്ടുണ്ട്) -->
     <div id="main-view">
         <div class="grid-container">
             <div class="room-btn" onclick="openChat('Alappuzha')"><span class="btn-icon">📍</span> Alappuzha</div>
@@ -343,13 +338,11 @@
         </div>
     </div>
 
-    <!-- VIEW 2: ലൈവ് ചാറ്റ് റൂം -->
     <div id="chat-view">
         <div class="chat-header">
             <button class="back-btn" onclick="closeChat()">Back</button>
             <h2 id="current-room-title" style="margin:0; color:#ff8800; font-size:16px;">Chat</h2>
             
-            <!-- ഒൺ-ക്ലിക്ക് അനോണിമസ് ടോഗിൾ സ്വിച്ച് -->
             <div class="toggle-container" onclick="toggleAnonymous()">
                 <span id="toggle-icon">👤</span>
                 <span id="toggle-txt" class="toggle-text">Name Mode</span>
@@ -362,7 +355,6 @@
         </div>
     </div>
 
-    <!-- താഴത്തെ പരസ്യം (300x250 Large Banner) -->
     <div class="ad-container" id="bottom-ad">
         <script>
           atOptions = {
@@ -376,14 +368,12 @@
         <script src="https://www.highperformanceformat.com/5fd40353b8ab9dcfcce8c7342e0b18e0/invoke.js"></script>
     </div>
 
-    <!-- താഴെയുള്ള മൂന്ന് എമർജൻസി ബട്ടണുകൾ -->
     <div class="bottom-buttons" id="emergency-btns">
         <button onclick="makeEmergencyCall('108')" class="b-btn btn-red">🚨 108</button>
         <button onclick="makeEmergencyCall('112')" class="b-btn btn-blue">🛡️ 112</button>
         <button onclick="makeEmergencyCall('101')" class="b-btn btn-orange">🔥 101</button>
     </div>
 
-    <!-- Firebase SDK Links -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
@@ -410,15 +400,19 @@
 
         window.onload = function() {
             let savedName = localStorage.getItem('chat_user_name');
-            if (!savedName) {
+            // 'User' എന്ന പഴയ ഡാറ്റയോ അല്ലെങ്കിൽ ഒന്നുമില്ലെങ്കിലോ പേര് ചോദിക്കുക
+            if (!savedName || savedName === "User") {
                 document.getElementById('login-modal').style.display = 'flex';
+            } else {
+                // മുൻപ് ശരിയായ പേര് ഉണ്ടെങ്കിൽ അത് ബാക്കപ്പ് ആക്കുക
+                localStorage.setItem('chat_saved_backup_name', savedName);
             }
         }
 
         function saveUserName() {
             let nameInput = document.getElementById('user-display-name').value.trim();
-            if (nameInput === "") {
-                alert("Please enter a name!");
+            if (nameInput === "" || nameInput === "User") {
+                alert("Please enter a proper name!");
                 return;
             }
             localStorage.setItem('chat_user_name', nameInput);
@@ -435,7 +429,12 @@
         function toggleAnonymous() {
             const icon = document.getElementById('toggle-icon');
             const txt = document.getElementById('toggle-txt');
-            let backupName = localStorage.getItem('chat_saved_backup_name') || 'User';
+            let backupName = localStorage.getItem('chat_saved_backup_name');
+            
+            // ഒരു സുരക്ഷയ്ക്ക്: ബാക്കപ്പ് ഒഴിഞ്ഞു കിടക്കുകയോ "User" എന്ന് കാണിക്കുകയോ ചെയ്താൽ പുതിയ പേര് സെറ്റ് ചെയ്യാം
+            if (!backupName || backupName === "User") {
+                backupName = "Member";
+            }
 
             if (!isAnonymousMode) {
                 localStorage.setItem('chat_user_name', 'Anonymous');
