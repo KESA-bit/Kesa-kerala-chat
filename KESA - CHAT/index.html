@@ -4,305 +4,556 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KESA - Kerala Public Rooms</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- അഡ്‌സ്റ്റെറ ബാക്ക്ഗ്രൗണ്ട് (Popunder) പരസ്യ കോഡ് -->
+    <script src="https://pl29656891.effectivecpmnetwork.com/48/21/5c/48215c9a4f06f775a8557fdc3e920ba6.js"></script>
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #121212; color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            color: #ff8800;
+            margin: 15px 0 5px 0;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .ad-container {
+            text-align: center;
+            width: 100%;
+            margin: 10px 0;
+            z-index: 10;
+        }
         
-        /* Header */
-        .header { background: #1c1c1e; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; color: #E67E22; border-bottom: 1px solid #2c2c2e; position: relative; }
-        .back-btn { position: absolute; left: 15px; top: 18px; color: white; cursor: pointer; display: none; }
-
-        /* Login Screen (Sign Up) */
-        .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
-        .login-box { background: #1c1c1e; padding: 30px 20px; border-radius: 15px; width: 100%; max-width: 340px; text-align: center; border: 1px solid #2c2c2e; }
-        .login-box h2 { color: #E67E22; margin-bottom: 15px; }
-        .login-box input { width: 100%; padding: 12px; background: #2c2c2e; border: 1px solid #444; color: white; border-radius: 8px; margin-bottom: 15px; outline: none; text-align: center; font-size: 16px; }
-        .login-box button { background: #E67E22; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
-
-        /* Main Content Area */
-        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-
-        /* Home Screen Container */
-        .home-container { display: flex; flex-direction: column; gap: 15px; padding: 15px; padding-bottom: 90px; }
+        /* പ്രധാന കണ്ടെയ്നറുകൾ */
+        #main-view {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         
-        /* Home Screen: 14 Districts Grid */
-        .home-screen { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .district-card { background: #1c1c1e; padding: 20px 10px; border-radius: 10px; text-align: center; font-size: 15px; font-weight: bold; cursor: pointer; border: 1px solid #2c2c2e; transition: 0.2s; }
-        .district-card:active { background: #E67E22; transform: scale(0.95); }
-        .district-card i { display: block; margin-bottom: 6px; font-size: 20px; color: #E67E22; }
+        /* ചാറ്റ് ഫുൾ സ്ക്രീൻ ലേഔട്ട് */
+        #chat-view { 
+            display: none; 
+            width: 100%;
+            max-width: 450px;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            padding: 10px 0;
+        }
 
-        /* 🎯 TOP AD ZONE: മുകളിലെ ചെറിയ പരസ്യം (320x50) */
-        .top-ad-box { text-align: center; padding: 8px 0; background: #141414; border-bottom: 1px solid #2c2c2e; width: 100%; display: flex; justify-content: center; align-items: center; min-height: 60px; }
-
-        /* 🎯 BOTTOM AD ZONE: താഴത്തെ വലിയ പരസ്യം (300x250) */
-        .ad-box { text-align: center; padding: 15px 0; margin-top: 15px; border-top: 1px solid #2c2c2e; width: 100%; display: flex; justify-content: center; align-items: center; min-height: 260px; }
-
-        /* Chat Screen */
-        .chat-screen { display: none; flex-direction: column; height: 100%; flex: 1; }
-        .chat-area { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #141414; }
+        /* ജില്ലകളുടെ ഗ്രിഡ് സെറ്റിംഗ്സ് */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 15px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        .room-btn {
+            background-color: #1e1e1e;
+            color: white;
+            border: 1px solid #2d2d2d;
+            padding: 18px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
         
-        /* Chat Messages */
-        .message { max-width: 75%; padding: 10px 14px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; position: relative; }
-        .msg-sender { font-size: 11px; color: #E67E22; font-weight: bold; margin-bottom: 3px; display: flex; justify-content: space-between; align-items: center; }
-        .msg-receive { background: #1c1c1e; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .msg-send { background: #E67E22; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg-send .msg-sender { color: white; }
+        /* രണ്ടാമത്തെ സ്ക്രീൻഷോട്ടിലെ പോലെ കൃത്യം ഓറഞ്ച് ലൊക്കേഷൻ ഐക്കൺ സ്റ്റൈൽ */
+        .room-btn .btn-icon {
+            font-size: 24px;
+            color: #ff8800;
+        }
+        .room-btn:hover {
+            background-color: #ff8800;
+            color: black;
+            border-color: #ff8800;
+            transform: translateY(-2px);
+        }
+        .room-btn:hover .btn-icon {
+            color: black;
+        }
 
-        /* Chat Input Area */
-        .chat-controls { background: #1c1c1e; padding: 10px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #2c2c2e; }
-        .anon-bar { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #aaa; padding-left: 5px; }
-        .anon-bar input { width: 16px; height: 16px; accent-color: #E67E22; }
-        .input-area { display: flex; gap: 10px; align-items: center; }
-        .input-area input { flex: 1; background: #2c2c2e; border: 1px solid #444; padding: 12px 15px; color: white; border-radius: 25px; outline: none; font-size: 15px; }
-        .input-area button { background: #E67E22; border: none; width: 45px; height: 45px; border-radius: 50%; color: white; cursor: pointer; font-size: 18px; }
+        /* പ്രൊഫഷണൽ ലൈവ് ചാറ്റ് ലേഔട്ട് */
+        .chat-header {
+            width: 92%;
+            background: #1e1e1e;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff8800;
+            border-radius: 8px 8px 0 0;
+            box-sizing: border-box;
+        }
+        
+        /* അനോണിമസ് ടോഗിൾ ബട്ടൺ */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 1px solid #444;
+            user-select: none;
+        }
+        .toggle-text {
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 5px;
+            color: #aaa;
+        }
+        .toggle-active {
+            color: #ff3333;
+        }
 
-        /* 🚨 EMERGENCY FIXED BOTTOM BAR */
-        .emergency-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1c1c1e; border-top: 1px solid #ff3b30; display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px; gap: 8px; z-index: 100; }
-        .emergency-btn { border: none; border-radius: 8px; padding: 12px 5px; color: white; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-decoration: none; }
-        .bg-ambulance { background: #cc3333; }
-        .bg-police { background: #0055aa; }
-        .bg-fire { background: #e65c00; }
-        .emergency-btn:active { transform: scale(0.95); opacity: 0.9; }
+        .back-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .messages-container {
+            flex: 1;
+            width: 92%;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #161616;
+            border: 1px solid #222;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-sizing: border-box;
+        }
+        
+        /* ചാറ്റ് ബബിൾ ഡിзайн */
+        .msg {
+            padding: 10px 14px;
+            border-radius: 14px;
+            max-width: 75%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .msg-sender {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ff8800;
+            margin-bottom: 3px;
+        }
+        .msg.sent {
+            background: #005c4b;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .msg.sent .msg-sender {
+            color: #a6f9ff;
+        }
+        .msg.received {
+            background: #202c33;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input-area {
+            width: 92%;
+            display: flex;
+            gap: 8px;
+            padding: 12px 0 5px 0;
+            box-sizing: border-box;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #2a2a2a;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+        .send-btn {
+            background: #ff8800;
+            color: black;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* താഴെയുള്ള എമർജൻസി ബട്ടണുകൾ */
+        .bottom-buttons {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 450px;
+            margin: 15px 0;
+        }
+        .b-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-red { background-color: #d32f2f; }
+        .btn-blue { background-color: #1976d2; }
+        .btn-orange { background-color: #e65100; }
+
+        /* നെയിം പ്രോംപ്റ്റ് മോഡൽ */
+        .name-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .name-box {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 16px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid #ff8800;
+        }
+        .name-input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #2d2d2d;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+        .name-submit-btn {
+            background: #ff8800;
+            color: black;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .anon-link {
+            display: block;
+            margin-top: 15px;
+            color: #bbb;
+            font-size: 13px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sign Up Screen -->
-    <div class="login-screen" id="login-view" style="display: none;">
-        <div class="login-box">
-            <h2>KESA Chat Room</h2>
-            <p style="color: #888; font-size: 13px; margin-bottom: 15px;">തുടങ്ങാൻ നിന്റെ പേര് ടൈപ്പ് ചെയ്യൂ</p>
-            <input type="text" id="username-input" placeholder="Enter your name...">
-            <button onclick="saveProfile()">തുടങ്ങാം 🚀</button>
+    <!-- ആദ്യമായി കയറുമ്പോൾ പേര് ചോദിക്കുന്ന ബോക്സ് -->
+    <div id="login-modal" class="name-modal">
+        <div class="name-box">
+            <h3 style="color: #ff8800; margin-top: 0;">Enter Your Name</h3>
+            <p style="font-size: 13px; color: #aaa;">ചാറ്റിൽ കാണിക്കേണ്ട പേര് ടൈപ്പ് ചെയ്യുക</p>
+            <input type="text" id="user-display-name" class="name-input" placeholder="Your Name here..." maxlength="15">
+            <button class="name-submit-btn" onclick="saveUserName()">Continue</button>
+            <span class="anon-link" onclick="saveAnonymous()">Continue as Anonymous</span>
         </div>
     </div>
 
-    <!-- App Header -->
-    <div class="header">
-        <i class="fa-solid fa-arrow-left back-btn" id="back-button" onclick="showHomeScreen()"></i>
-        <span id="title-text">KESA - Kerala Rooms</span>
-    </div>
-
-    <!-- 🎯 TOP AD ZONE: ഹെഡറിന് താഴെ ചെറിയ 320x50 പരസ്യം ഇവിടെ വരും -->
-    <div class="top-ad-box" id="top-ad-container">
-        <!-- മുകളിലെ ചെറിയ പരസ്യത്തിന്റെ സ്ക്രിപ്റ്റ് താഴെ നൽകിയിരിക്കുന്നു. (ആക്റ്റീവ് ആകുമ്പോൾ ഇത് വർക്ക് ചെയ്യും) -->
-        <script type="text/javascript">
-            atOptions = {
-                'key' : '8bb11c1d81de2ce9f1a29de3d53b49ee',
-                'format' : 'iframe',
-                'height' : 50,
-                'width' : 320,
-                'params' : {}
-            };
+    <!-- മുകളിലെ പരസ്യം (320x50 Banner) -->
+    <div class="ad-container" id="top-ad">
+        <script>
+          atOptions = {
+            'key' : '77ebe3ca876a7dca3f6625e469b3e7e4',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
         </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/8bb11c1d81de2ce9f1a29de3d53b49ee/invoke.js"></script>
+        <script src="https://www.highperformanceformat.com/77ebe3ca876a7dca3f6625e469b3e7e4/invoke.js"></script>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="main-content">
-        
-        <!-- Home Screen Container -->
-        <div class="home-container" id="home-view">
-            <!-- 14 ജില്ലകളുടെ ഗ്രിഡ് -->
-            <div class="home-screen" id="districts-grid"></div>
+    <h1 class="header" id="main-header">KESA - Kerala Rooms</h1>
+
+    <!-- VIEW 1: ജില്ലകളുടെ ലിസ്റ്റ് (ഇപ്പോൾ രണ്ടാമത്തെ സ്ക്രീൻഷോട്ടിൽ ഉള്ളതുപോലെ ഓറഞ്ച് ലൊക്കേഷൻ സിംബൽ ആക്കി മാറ്റിയിട്ടുണ്ട്) -->
+    <div id="main-view">
+        <div class="grid-container">
+            <div class="room-btn" onclick="openChat('Alappuzha')"><span class="btn-icon">📍</span> Alappuzha</div>
+            <div class="room-btn" onclick="openChat('Ernakulam')"><span class="btn-icon">📍</span> Ernakulam</div>
+            <div class="room-btn" onclick="openChat('Idukki')"><span class="btn-icon">📍</span> Idukki</div>
+            <div class="room-btn" onclick="openChat('Kannur')"><span class="btn-icon">📍</span> Kannur</div>
+            <div class="room-btn" onclick="openChat('Kasaragod')"><span class="btn-icon">📍</span> Kasaragod</div>
+            <div class="room-btn" onclick="openChat('Kollam')"><span class="btn-icon">📍</span> Kollam</div>
+            <div class="room-btn" onclick="openChat('Kottayam')"><span class="btn-icon">📍</span> Kottayam</div>
+            <div class="room-btn" onclick="openChat('Kozhikode')"><span class="btn-icon">📍</span> Kozhikode</div>
+            <div class="room-btn" onclick="openChat('Malappuram')"><span class="btn-icon">📍</span> Malappuram</div>
+            <div class="room-btn" onclick="openChat('Palakkad')"><span class="btn-icon">📍</span> Palakkad</div>
+            <div class="room-btn" onclick="openChat('Pathanamthitta')"><span class="btn-icon">📍</span> Pathanamthitta</div>
+            <div class="room-btn" onclick="openChat('Thiruvananthapuram')"><span class="btn-icon">📍</span> Thiruvananthapuram</div>
+            <div class="room-btn" onclick="openChat('Thrissur')"><span class="btn-icon">📍</span> Thrissur</div>
+            <div class="room-btn" onclick="openChat('Wayanad')"><span class="btn-icon">📍</span> Wayanad</div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: ലൈവ് ചാറ്റ് റൂം -->
+    <div id="chat-view">
+        <div class="chat-header">
+            <button class="back-btn" onclick="closeChat()">Back</button>
+            <h2 id="current-room-title" style="margin:0; color:#ff8800; font-size:16px;">Chat</h2>
             
-            <!-- 🎯 BOTTOM AD BOX: താഴത്തെ വലിയ 300x250 പരസ്യം -->
-            <div class="ad-box">
-                <script async="async" data-cfasync="false" src="https://pl29514611.effectivecpmnetwork.com/a2e998de903db0240b8ca90ae486f118/invoke.js"></script>
-                <div id="container-a2e998de903db0240b8ca90ae486f118"></div>
+            <!-- ഒൺ-ക്ലിക്ക് അനോണിമസ് ടോഗിൾ സ്വിച്ച് -->
+            <div class="toggle-container" onclick="toggleAnonymous()">
+                <span id="toggle-icon">👤</span>
+                <span id="toggle-txt" class="toggle-text">Name Mode</span>
             </div>
         </div>
-
-        <!-- Chat Screen -->
-        <div class="chat-screen" id="chat-view">
-            <div class="chat-area" id="chat-box"></div>
-            <div class="chat-controls">
-                <div class="anon-bar">
-                    <input type="checkbox" id="anon-toggle">
-                    <label for="anon-toggle"><i class="fa-solid fa-user-secret"></i> Send as Anonymous (•)</label>
-                </div>
-                <div class="input-area">
-                    <input type="text" id="msg-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-                    <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
+        <div class="messages-container" id="msg-box"></div>
+        <div class="chat-input-area">
+            <input type="text" id="msg-input" class="chat-input" placeholder="Type a message...">
+            <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
-    <!-- 🚨 FIXED EMERGENCY BAR -->
-    <div class="emergency-bar" id="emergency-panel">
-        <a href="tel:108" target="_blank" class="emergency-btn bg-ambulance"><i class="fa-solid fa-ambulance"></i> 108</a>
-        <a href="tel:112" target="_blank" class="emergency-btn bg-police"><i class="fa-solid fa-shield-halved"></i> 112</a>
-        <a href="tel:101" target="_blank" class="emergency-btn bg-fire"><i class="fa-solid fa-fire-extinguisher"></i> 101</a>
+    <!-- താഴത്തെ പരസ്യം (300x250 Large Banner) -->
+    <div class="ad-container" id="bottom-ad">
+        <script>
+          atOptions = {
+            'key' : '5fd40353b8ab9dcfcce8c7342e0b18e0',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/5fd40353b8ab9dcfcce8c7342e0b18e0/invoke.js"></script>
     </div>
 
+    <!-- താഴെയുള്ള മൂന്ന് എമർജൻസി ബട്ടണുകൾ -->
+    <div class="bottom-buttons" id="emergency-btns">
+        <button onclick="makeEmergencyCall('108')" class="b-btn btn-red">🚨 108</button>
+        <button onclick="makeEmergencyCall('112')" class="b-btn btn-blue">🛡️ 112</button>
+        <button onclick="makeEmergencyCall('101')" class="b-btn btn-orange">🔥 101</button>
+    </div>
+
+    <!-- Firebase SDK Links -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
-            projectId: "kesa-c9fd6", 
-            databaseURL: "https://kesa-c9fd6-default-rtdb.firebaseio.com" 
+            projectId: "kesa-c9fd6",
+            databaseURL: "https://kesa-c9fd6-default-rtdb.firebaseio.com"
         };
-
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        const districts = [
-            "Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", 
-            "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", 
-            "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"
-        ];
-
-        let myUsername = "";
-        let currentDistrict = "";
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+        
+        let currentRoom = "";
         let chatRef = null;
+        let isAnonymousMode = false;
+        
+        let myUserId = localStorage.getItem('chat_user_id');
+        if (!myUserId) {
+            myUserId = 'user_' + Math.random().toString(36).substring(2, 11);
+            localStorage.setItem('chat_user_id', myUserId);
+        }
 
         window.onload = function() {
-            myUsername = localStorage.getItem('kesa_chat_username');
-            if (!myUsername) {
-                document.getElementById('login-view').style.display = 'flex';
-            } else {
-                loadHomeScreen();
+            let savedName = localStorage.getItem('chat_user_name');
+            if (!savedName) {
+                document.getElementById('login-modal').style.display = 'flex';
             }
-        };
+        }
 
-        function saveProfile() {
-            const nameInput = document.getElementById('username-input').value.trim();
+        function saveUserName() {
+            let nameInput = document.getElementById('user-display-name').value.trim();
             if (nameInput === "") {
-                alert("ദയവായി ഒരു പേര് ടൈപ്പ് ചെയ്യൂ!");
+                alert("Please enter a name!");
                 return;
             }
-            localStorage.setItem('kesa_chat_username', nameInput);
-            myUsername = nameInput;
-            document.getElementById('login-view').style.display = 'none';
-            loadHomeScreen();
+            localStorage.setItem('chat_user_name', nameInput);
+            localStorage.setItem('chat_saved_backup_name', nameInput);
+            document.getElementById('login-modal').style.display = 'none';
         }
 
-        function loadHomeScreen() {
-            const grid = document.getElementById('districts-grid');
-            grid.innerHTML = ""; 
-            districts.forEach(dist => {
-                const card = document.createElement('div');
-                card.className = 'district-card';
-                card.onclick = () => openChatRoom(dist);
-                card.innerHTML = `<i class="fa-solid fa-location-dot"></i>${dist}`;
-                grid.appendChild(card);
-            });
+        function saveAnonymous() {
+            localStorage.setItem('chat_user_name', 'Anonymous');
+            localStorage.setItem('chat_saved_backup_name', 'Anonymous');
+            document.getElementById('login-modal').style.display = 'none';
         }
 
-        function openChatRoom(districtName) {
-            currentDistrict = districtName;
-            document.getElementById('home-view').style.display = 'none';
-            document.getElementById('emergency-panel').style.display = 'none'; 
-            document.getElementById('top-ad-container').style.display = 'none'; // ചാറ്റ് ചെയ്യുമ്പോൾ മുകളിലെ പരസ്യം തത്കാലം മറയ്ക്കുന്നു
+        function toggleAnonymous() {
+            const icon = document.getElementById('toggle-icon');
+            const txt = document.getElementById('toggle-txt');
+            let backupName = localStorage.getItem('chat_saved_backup_name') || 'User';
+
+            if (!isAnonymousMode) {
+                localStorage.setItem('chat_user_name', 'Anonymous');
+                icon.innerText = "🕵️";
+                txt.innerText = "Anonymous";
+                txt.classList.add('toggle-active');
+                isAnonymousMode = true;
+            } else {
+                localStorage.setItem('chat_user_name', backupName);
+                icon.innerText = "👤";
+                txt.innerText = "Name Mode";
+                txt.classList.remove('toggle-active');
+                isAnonymousMode = false;
+            }
+        }
+
+        function makeEmergencyCall(number) {
+            var telUrl = "tel:" + number;
+            window.open(telUrl, '_system');
+            window.location.href = telUrl;
+        }
+
+        function openChat(roomName) {
+            currentRoom = roomName;
+            document.getElementById('current-room-title').innerText = "💬 " + roomName;
+            
+            document.getElementById('main-view').style.display = 'none';
             document.getElementById('chat-view').style.display = 'flex';
-            document.getElementById('back-button').style.display = 'block';
-            document.getElementById('title-text').innerText = districtName + " Room";
-
-            const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML = ""; 
-
-            chatRef = db.ref('chats/' + districtName).limitToLast(100);
             
-            chatRef.on('child_added', (snapshot) => {
-                const data = snapshot.val();
-                const msgId = snapshot.key;
-                displayMessage(msgId, data.sender, data.text);
-            });
-
-            chatRef.on('child_removed', (snapshot) => {
-                const msgId = snapshot.key;
-                const msgElement = document.getElementById(msgId);
-                if (msgElement) msgElement.remove();
-            });
+            document.getElementById('main-header').style.display = 'none';
+            document.getElementById('top-ad').style.display = 'none';
+            document.getElementById('bottom-ad').style.display = 'none';
+            document.getElementById('emergency-btns').style.display = 'none';
+            
+            window.scrollTo(0, 0);
+            
+            if(chatRef) chatRef.off();
+            chatRef = database.ref('rooms/' + currentRoom);
+            listenForMessages();
         }
 
-        function showHomeScreen() {
-            if(chatRef) chatRef.off(); 
+        function closeChat() {
             document.getElementById('chat-view').style.display = 'none';
-            document.getElementById('home-view').style.display = 'flex';
-            document.getElementById('emergency-panel').style.display = 'grid'; 
-            document.getElementById('top-ad-container').style.display = 'flex'; // ഹോമിൽ തിരിച്ചെത്തുമ്പോൾ മുകളിലെ പരസ്യം വീണ്ടും കാണിക്കും
-            document.getElementById('back-button').style.display = 'none';
-            document.getElementById('title-text').innerText = "KESA - Kerala Rooms";
-        }
-
-        function displayMessage(msgId, sender, text) {
-            const chatBox = document.getElementById('chat-box');
-            const msgDiv = document.createElement('div');
+            document.getElementById('main-view').style.display = 'flex';
             
-            let currentIsMe = (sender === myUsername);
-            if(sender === "•" && localStorage.getItem('last_msg_was_anon_by_me') === text) {
-                currentIsMe = true;
-                localStorage.removeItem('last_msg_was_anon_by_me');
-            }
-
-            msgDiv.id = msgId;
-            msgDiv.className = 'message ' + (currentIsMe ? 'msg-send' : 'msg-receive');
+            document.getElementById('main-header').style.display = 'block';
+            document.getElementById('top-ad').style.display = 'block';
+            document.getElementById('bottom-ad').style.display = 'block';
+            document.getElementById('emergency-btns').style.display = 'flex';
             
-            let deleteIcon = currentIsMe ? `<i class="fa-solid fa-trash" style="font-size: 11px; margin-left: 10px; cursor: pointer; color: #fff; opacity: 0.7;" onclick="deleteMessage('${msgId}')"></i>` : '';
-            
-            msgDiv.innerHTML = `
-                <span class="msg-sender">${sender} ${deleteIcon}</span>
-                <div>${text}</div>
-            `;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight; 
-        }
-
-        function deleteMessage(msgId) {
-            if (confirm("ഈ മെസ്സേജ് എല്ലാവർക്കും വേണ്ടി ഡിലീറ്റ് ചെയ്യണോ?")) {
-                db.ref('chats/' + currentDistrict + '/' + msgId).remove();
-            }
+            if(chatRef) chatRef.off();
         }
 
         function sendMessage() {
             const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            if (text === "" || !currentDistrict) return;
-
-            const isAnon = document.getElementById('anon-toggle').checked;
-            const finalSender = isAnon ? "•" : myUsername;
-
-            if(isAnon) {
-                localStorage.setItem('last_msg_was_anon_by_me', text);
+            const messageText = input.value.trim();
+            let senderName = localStorage.getItem('chat_user_name') || 'Anonymous';
+            
+            if (messageText !== "" && currentRoom !== "") {
+                const newMsgRef = database.ref('rooms/' + currentRoom).push();
+                newMsgRef.set({
+                    userId: myUserId,
+                    userName: senderName,
+                    text: messageText,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+                input.value = "";
             }
+        }
 
-            const roomRef = db.ref('chats/' + currentDistrict);
-
-            roomRef.push({
-                sender: finalSender,
-                text: text,
-                timestamp: Date.now()
-            });
-            input.value = "";
-
-            roomRef.once('value', (snapshot) => {
+        function listenForMessages() {
+            const msgBox = document.getElementById('msg-box');
+            
+            chatRef.on('value', (snapshot) => {
+                msgBox.innerHTML = "";
                 if (snapshot.exists()) {
-                    const messageCount = snapshot.numChildren();
-                    if (messageCount > 100) {
-                        let count = 0;
-                        const overflowCount = messageCount - 100;
-                        snapshot.forEach((childSnapshot) => {
-                            if (count < overflowCount) {
-                                roomRef.child(childSnapshot.key).remove();
-                                count++;
-                            } else {
-                                return true; 
-                            }
-                        });
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+                    
+                    if (keys.length > 100) {
+                        const deleteCount = keys.length - 100;
+                        for (let i = 0; i < deleteCount; i++) {
+                            database.ref('rooms/' + currentRoom + '/' + keys[i]).remove();
+                        }
                     }
+
+                    keys.forEach(key => {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.classList.add('msg');
+                        
+                        const nameSpan = document.createElement('span');
+                        nameSpan.classList.add('msg-sender');
+                        nameSpan.innerText = data[key].userName ? data[key].userName : "Anonymous";
+                        
+                        const textSpan = document.createElement('span');
+                        textSpan.innerText = data[key].text;
+                        
+                        msgDiv.appendChild(nameSpan);
+                        msgDiv.appendChild(textSpan);
+                        
+                        if (data[key].userId === myUserId) {
+                            msgDiv.classList.add('sent');
+                        } else {
+                            msgDiv.classList.add('received');
+                        }
+                        
+                        msgBox.appendChild(msgDiv);
+                    });
+                    msgBox.scrollTop = msgBox.scrollHeight;
                 }
             });
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        document.getElementById("msg-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
     </script>
 </body>
 </html>
