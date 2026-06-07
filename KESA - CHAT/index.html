@@ -6,7 +6,6 @@
     <title>KESA - Kerala Public Rooms</title>
     
     <script src="https://pl29656891.effectivecpmnetwork.com/48/21/5c/48215c9a4f06f775a8557fdc3e920ba6.js"></script>
-
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,27 +26,14 @@
             font-weight: bold;
             letter-spacing: 1px;
         }
-        
-        /* ✅ മുകളിലെ പരസ്യത്തിന്റെ കണ്ടെയ്നർ സൈസ് കൃത്യമായി 300x50 ആക്കി */
-        .top-ad-slot {
-            width: 300px;
-            height: 50px;
-            margin: 10px auto;
+        .ad-container {
             text-align: center;
-            display: block;
-            z-index: 10;
-        }
-
-        /* താഴത്തെ പരസ്യത്തിന്റെ കണ്ടെയ്നർ സൈസ് (300x250) */
-        .bottom-ad-slot {
-            width: 300px;
-            height: 250px;
-            margin: 15px auto;
-            text-align: center;
-            display: block;
+            width: 100%;
+            margin: 10px 0;
             z-index: 10;
         }
         
+        /* പ്രധാന കണ്ടെയ്നറുകൾ */
         #main-view {
             width: 100%;
             max-width: 450px;
@@ -56,16 +42,18 @@
             align-items: center;
         }
         
+        /* ചാറ്റ് ഫുൾ സ്ക്രീൻ ലേഔട്ട് */
         #chat-view { 
             display: none; 
             width: 100%;
             max-width: 450px;
             flex-direction: column;
-            height: calc(100vh - 85px);
+            align-items: center;
+            height: 80vh;
             box-sizing: border-box;
-            padding: 5px 10px 10px 10px;
+            padding: 10px 0;
         }
-
+        /* ജില്ലകളുടെ ഗ്രിഡ് സെറ്റിംഗ്സ് */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -105,9 +93,9 @@
         .room-btn:hover .btn-icon {
             color: black;
         }
-
+        /* പ്രൊഫഷണൽ ലൈവ് ചാറ്റ് ലേഔട്ട് */
         .chat-header {
-            width: 100%;
+            width: 92%;
             background: #1e1e1e;
             padding: 12px;
             display: flex;
@@ -118,6 +106,7 @@
             box-sizing: border-box;
         }
         
+        /* അനോണിമസ് ടോഗിൾ ബട്ടൺ */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -137,7 +126,6 @@
         .toggle-active {
             color: #ff3333;
         }
-
         .back-btn {
             background: #d32f2f;
             color: white;
@@ -150,7 +138,7 @@
         
         .messages-container {
             flex: 1;
-            width: 100%;
+            width: 92%;
             padding: 12px;
             overflow-y: auto;
             display: flex;
@@ -161,8 +149,10 @@
             border-top: none;
             border-radius: 0 0 8px 8px;
             box-sizing: border-box;
+            min-height: 300px;
         }
         
+        /* ചാറ്റ് ബബിൾ ഡിзайн */
         .msg {
             padding: 10px 14px;
             border-radius: 14px;
@@ -173,6 +163,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         .msg-header-area {
             display: flex;
@@ -186,13 +177,17 @@
             font-weight: bold;
             color: #ff8800;
         }
-        .single-del-btn {
+        .delete-msg-btn {
+            background: none;
+            border: none;
+            color: #ff5555;
             cursor: pointer;
             font-size: 12px;
-            opacity: 0.5;
+            padding: 0;
+            opacity: 0.6;
             transition: opacity 0.2s;
         }
-        .single-del-btn:hover {
+        .delete-msg-btn:hover {
             opacity: 1;
         }
         .msg.sent {
@@ -210,9 +205,8 @@
             align-self: flex-start;
             border-bottom-left-radius: 2px;
         }
-
         .chat-input-area {
-            width: 100%;
+            width: 92%;
             display: flex;
             gap: 8px;
             padding: 12px 0 5px 0;
@@ -237,7 +231,7 @@
             font-weight: bold;
             cursor: pointer;
         }
-
+        /* താഴെയുള്ള എമർജൻസി ബട്ടണുകൾ */
         .bottom-buttons {
             display: flex;
             justify-content: space-around;
@@ -261,7 +255,7 @@
         .btn-red { background-color: #d32f2f; }
         .btn-blue { background-color: #1976d2; }
         .btn-orange { background-color: #e65100; }
-
+        /* നെയിം പ്രോംപ്റ്റ് മോഡൽ */
         .name-modal {
             display: none;
             position: fixed;
@@ -313,7 +307,6 @@
     </style>
 </head>
 <body>
-
     <div id="login-modal" class="name-modal">
         <div class="name-box">
             <h3 style="color: #ff8800; margin-top: 0;">Enter Your Name</h3>
@@ -323,13 +316,11 @@
             <span class="anon-link" onclick="saveAnonymous()">Continue as Anonymous</span>
         </div>
     </div>
-
-    <div class="top-ad-slot" id="top-ad">
-        <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;'><script type='text/javascript'>atOptions={'key':'77ebe3ca776a7dca3f6625e469b3e7e4','format':'iframe','height':50,'width':300,'params':{}};</script><script type='text/javascript' src='https://www.highperformanceformat.com/77ebe3ca776a7dca3f6625e469b3e7e4/invoke.js'></script></body></html>" width="300" height="50" style="border:none; overflow:hidden;" scrolling="no"></iframe>
-    </div>
-
+    
+    <div class="ad-container" id="top-ad"></div>
+    
     <h1 class="header" id="main-header">KESA - Kerala Rooms</h1>
-
+    
     <div id="main-view">
         <div class="grid-container">
             <div class="room-btn" onclick="openChat('Alappuzha')"><span class="btn-icon">📍</span> Alappuzha</div>
@@ -348,18 +339,15 @@
             <div class="room-btn" onclick="openChat('Wayanad')"><span class="btn-icon">📍</span> Wayanad</div>
         </div>
     </div>
-
+    
     <div id="chat-view">
         <div class="chat-header">
             <button class="back-btn" onclick="closeChat()">Back</button>
-            <h2 id="current-room-title" style="margin:0; color:#ff8800; font-size:14px;">Chat</h2>
+            <h2 id="current-room-title" style="margin:0; color:#ff8800; font-size:16px;">Chat</h2>
             
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button onclick="clearAllMessages()" style="background: #d32f2f; color: white; border: none; padding: 6px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer;">Clear Chat</button>
-                <div class="toggle-container" onclick="toggleAnonymous()">
-                    <span id="toggle-icon">👤</span>
-                    <span id="toggle-txt" class="toggle-text">Name Mode</span>
-                </div>
+            <div class="toggle-container" onclick="toggleAnonymous()">
+                <span id="toggle-icon">👤</span>
+                <span id="toggle-txt" class="toggle-text">Name Mode</span>
             </div>
         </div>
         <div class="messages-container" id="msg-box"></div>
@@ -368,17 +356,26 @@
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
-
-    <div class="bottom-ad-slot" id="bottom-ad">
-        <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;'><script type='text/javascript'>atOptions={'key':'5fd40353b8ab9dcfcce8c7342e0b18e0','format':'iframe','height':250,'width':300,'params':{}};</script><script type='text/javascript' src='https://www.highperformanceformat.com/5fd40353b8ab9dcfcce8c7342e0b18e0/invoke.js'></script></body></html>" width="300" height="250" style="border:none; overflow:hidden;" scrolling="no"></iframe>
+    
+    <div class="ad-container" id="bottom-ad">
+        <script>
+          atOptions = {
+            'key' : '5fd40353b8ab9dcfcce8c7342e0b18e0',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/5fd40353b8ab9dcfcce8c7342e0b18e0/invoke.js"></script>
     </div>
-
+    
     <div class="bottom-buttons" id="emergency-btns">
         <button onclick="makeEmergencyCall('108')" class="b-btn btn-red">🚨 108</button>
         <button onclick="makeEmergencyCall('112')" class="b-btn btn-blue">🛡️ 112</button>
         <button onclick="makeEmergencyCall('101')" class="b-btn btn-orange">🔥 101</button>
     </div>
-
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
@@ -403,16 +400,34 @@
             localStorage.setItem('chat_user_id', myUserId);
         }
 
+        // മുകളിലെ പരസ്യം ജാവാസ്ക്രിപ്റ്റ് വഴി ലോഡ് ചെയ്യിക്കാനുള്ള ഫങ്ക്ഷൻ
+        function loadTopAd() {
+            const adContainer = document.getElementById('top-ad');
+            adContainer.innerHTML = "";
+            
+            const scriptOptions = document.createElement('script');
+            scriptOptions.text = `
+                atOptions = {
+                    'key' : '77ebe3ca876a7dca3f6625e469b3e7e4',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            `;
+            
+            const scriptInvoke = document.createElement('script');
+            scriptInvoke.src = "https://www.highperformanceformat.com/77ebe3ca876a7dca3f6625e469b3e7e4/invoke.js";
+            
+            adContainer.appendChild(scriptOptions);
+            adContainer.appendChild(scriptInvoke);
+        }
+
         window.onload = function() {
+            loadTopAd();
             let savedName = localStorage.getItem('chat_user_name');
-            if (!savedName || savedName === "User" || savedName === "Member") {
+            if (!savedName || savedName === "User") {
                 document.getElementById('login-modal').style.display = 'flex';
-            } else if (savedName === "Anonymous") {
-                isAnonymousMode = true;
-                document.getElementById('toggle-icon').innerText = "🕵️";
-                const txt = document.getElementById('toggle-txt');
-                txt.innerText = "Anonymous";
-                txt.classList.add('toggle-active');
             } else {
                 localStorage.setItem('chat_saved_backup_name', savedName);
             }
@@ -420,38 +435,27 @@
 
         function saveUserName() {
             let nameInput = document.getElementById('user-display-name').value.trim();
-            if (nameInput === "" || nameInput === "User" || nameInput === "Anonymous" || nameInput === "Member") {
+            if (nameInput === "" || nameInput === "User") {
                 alert("Please enter a proper name!");
                 return;
             }
             localStorage.setItem('chat_user_name', nameInput);
             localStorage.setItem('chat_saved_backup_name', nameInput);
-            
-            isAnonymousMode = false;
-            document.getElementById('toggle-icon').innerText = "👤";
-            const txt = document.getElementById('toggle-txt');
-            txt.innerText = "Name Mode";
-            txt.classList.remove('toggle-active');
-            
             document.getElementById('login-modal').style.display = 'none';
         }
-
         function saveAnonymous() {
             localStorage.setItem('chat_user_name', 'Anonymous');
-            isAnonymousMode = true;
-            document.getElementById('toggle-icon').innerText = "🕵️";
-            const txt = document.getElementById('toggle-txt');
-            txt.innerText = "Anonymous";
-            txt.classList.add('toggle-active');
-            
+            localStorage.setItem('chat_saved_backup_name', 'Anonymous');
             document.getElementById('login-modal').style.display = 'none';
         }
-
         function toggleAnonymous() {
             const icon = document.getElementById('toggle-icon');
             const txt = document.getElementById('toggle-txt');
             let backupName = localStorage.getItem('chat_saved_backup_name');
             
+            if (!backupName || backupName === "User") {
+                backupName = "Member";
+            }
             if (!isAnonymousMode) {
                 localStorage.setItem('chat_user_name', 'Anonymous');
                 icon.innerText = "🕵️";
@@ -459,23 +463,19 @@
                 txt.classList.add('toggle-active');
                 isAnonymousMode = true;
             } else {
-                if (!backupName || backupName === "User" || backupName === "Anonymous" || backupName === "Member") {
-                    document.getElementById('login-modal').style.display = 'flex';
-                } else {
-                    localStorage.setItem('chat_user_name', backupName);
-                    icon.innerText = "👤";
-                    txt.innerText = "Name Mode";
-                    txt.classList.remove('toggle-active');
-                    isAnonymousMode = false;
-                }
+                localStorage.setItem('chat_user_name', backupName);
+                icon.innerText = "👤";
+                txt.innerText = "Name Mode";
+                txt.classList.remove('toggle-active');
+                isAnonymousMode = false;
             }
         }
-
         function makeEmergencyCall(number) {
             var telUrl = "tel:" + number;
+            window.open(telUrl, '_system');
             window.location.href = telUrl;
         }
-
+        
         function openChat(roomName) {
             currentRoom = roomName;
             document.getElementById('current-room-title').innerText = "💬 " + roomName;
@@ -484,9 +484,10 @@
             document.getElementById('chat-view').style.display = 'flex';
             document.getElementById('main-header').style.display = 'none';
             
-            document.getElementById('top-ad').style.display = 'block';
             document.getElementById('bottom-ad').style.display = 'none';
             document.getElementById('emergency-btns').style.display = 'none';
+            
+            loadTopAd();
             
             window.scrollTo(0, 0);
             
@@ -494,49 +495,24 @@
             chatRef = database.ref('rooms/' + currentRoom);
             listenForMessages();
         }
-
+        
         function closeChat() {
             document.getElementById('chat-view').style.display = 'none';
             document.getElementById('main-view').style.display = 'flex';
             document.getElementById('main-header').style.display = 'block';
             
-            document.getElementById('top-ad').style.display = 'block';
             document.getElementById('bottom-ad').style.display = 'block';
             document.getElementById('emergency-btns').style.display = 'flex';
             
+            loadTopAd();
+            
             if(chatRef) chatRef.off();
         }
-
-        function clearAllMessages() {
-            if (currentRoom !== "") {
-                if (confirm("തീർച്ചയായും ഈ റൂമിലെ എല്ലാ മെസ്സേജുകളും എല്ലാവർക്കും വേണ്ടി ഡിലീറ്റ് ചെയ്യണോ?")) {
-                    database.ref('rooms/' + currentRoom).remove()
-                    .catch((error) => {
-                        console.error("Error deleting messages: ", error);
-                    });
-                }
-            }
-        }
-
-        function deleteSingleMessage(msgKey) {
-            if (currentRoom !== "" && msgKey) {
-                if (confirm("ഈ മെസ്സേജ് എല്ലാവർക്കും വേണ്ടി ഡിലീറ്റ് ചെയ്യണോ?")) {
-                    database.ref('rooms/' + currentRoom + '/' + msgKey).remove()
-                    .catch((error) => {
-                        console.error("Error deleting message: ", error);
-                    });
-                }
-            }
-        }
-
+        
         function sendMessage() {
             const input = document.getElementById('msg-input');
             const messageText = input.value.trim();
-            
             let senderName = localStorage.getItem('chat_user_name') || 'Anonymous';
-            if (isAnonymousMode) {
-                senderName = 'Anonymous';
-            }
             
             if (messageText !== "" && currentRoom !== "") {
                 const newMsgRef = database.ref('rooms/' + currentRoom).push();
@@ -550,6 +526,19 @@
             }
         }
 
+        // സിംഗിൾ മെസ്സേജ് ഫയർബേസിൽ നിന്നും ഡിലീറ്റ് ചെയ്യാനുള്ള ഫങ്ക്ഷൻ
+        function deleteSingleMessage(msgId) {
+            if (confirm("ഈ മെസ്സേജ് ഫയർബേസിൽ നിന്നും പൂർണ്ണമായും ഡിലീറ്റ് ചെയ്യണോ?")) {
+                database.ref('rooms/' + currentRoom + '/' + msgId).remove()
+                .then(() => {
+                    console.log("Message deleted successfully.");
+                })
+                .catch((error) => {
+                    console.error("Delete failed: ", error);
+                });
+            }
+        }
+
         function listenForMessages() {
             const msgBox = document.getElementById('msg-box');
             
@@ -559,6 +548,7 @@
                     const data = snapshot.val();
                     const keys = Object.keys(data);
                     
+                    // കൃത്യം 100 മെസ്സേജുകൾ മാത്രം നിലനിർത്തി ബാക്കി ഫയർബേസിൽ നിന്നും ഡിലീറ്റ് ചെയ്യുന്നു
                     if (keys.length > 100) {
                         const deleteCount = keys.length - 100;
                         for (let i = 0; i < deleteCount; i++) {
@@ -572,20 +562,19 @@
                         
                         const headerArea = document.createElement('div');
                         headerArea.classList.add('msg-header-area');
-                        
+
                         const nameSpan = document.createElement('span');
                         nameSpan.classList.add('msg-sender');
                         nameSpan.innerText = data[key].userName ? data[key].userName : "Anonymous";
-                        
-                        const delIcon = document.createElement('span');
-                        delIcon.classList.add('single-del-btn');
-                        delIcon.innerText = "🗑️";
-                        delIcon.onclick = function() {
-                            deleteSingleMessage(key);
-                        };
-                        
                         headerArea.appendChild(nameSpan);
-                        headerArea.appendChild(delIcon);
+
+                        // ഇൻഡിവിജ്വൽ ഡിലീറ്റ് ബട്ടൺ ആഡ് ചെയ്യുന്നു
+                        const delBtn = document.createElement('button');
+                        delBtn.classList.add('delete-msg-btn');
+                        delBtn.innerHTML = "🗑️";
+                        delBtn.title = "Delete Message";
+                        delBtn.onclick = function() { deleteSingleMessage(key); };
+                        headerArea.appendChild(delBtn);
                         
                         const textSpan = document.createElement('span');
                         textSpan.innerText = data[key].text;
@@ -605,7 +594,6 @@
                 }
             });
         }
-
         document.getElementById("msg-input").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 sendMessage();
